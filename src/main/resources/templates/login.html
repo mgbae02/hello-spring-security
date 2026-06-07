@@ -59,5 +59,10 @@
         </div>
     </div>
 </div>
+<!-- 실습 증적: 일시/학번/성명 -->
+<footer class="text-center text-muted py-3 mt-4">
+    <p class="mb-0"
+       th:text="${'실습 수행 일시: ' + #temporals.format(#temporals.createNow(), 'yyyy-MM-dd (E) HH:mm:ss') + ' │ 학번: 2171181 │ 성명: 배민규'}"></p>
+</footer>
 </body>
 </html>
