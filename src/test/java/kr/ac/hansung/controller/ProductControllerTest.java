@@ -15,6 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -53,14 +57,15 @@ class ProductControllerTest {
     @WithMockUser(roles = "USER")
     @DisplayName("인증된 사용자 - 상품 목록 조회 성공 (200)")
     void listProducts_authenticated_returns200() throws Exception {
-        given(productService.findAll()).willReturn(List.of(
+        Page<Product> page = new PageImpl<>(List.of(
             new Product("Spring Boot 4 교재", 35000, "실습서", 50)
         ));
+        given(productService.getProducts(any(Pageable.class))).willReturn(page);
 
         mockMvc.perform(get("/products"))
             .andExpect(status().isOk())
             .andExpect(view().name("products/list"))
-            .andExpect(model().attributeExists("products"));
+            .andExpect(model().attributeExists("productPage"));
     }
 
     @Test
